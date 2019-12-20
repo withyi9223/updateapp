@@ -1,0 +1,2 @@
+include ':app', ':X5WebDemo'
+rootProject.name='MyDemo'
