@@ -1,4 +1,4 @@
-package com.zy;
+package com.zy.bean;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,20 +21,37 @@ package com.zy;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/20.
+ * Created by yi on 2019/12/23.
  */
-public class UserTest<T> {
+public class MyLinkedList {
 
-    protected T Utest;
+    private Node head = new Node();
 
-    public UserTest() {
-        this.Utest = createTest();
+    public void setHead(Node head) {
+        this.head = head;
     }
 
-    private T createTest() {
-        return Util.getInstance(this);
+    public Node getHead() {
+        return head;
     }
 
-    
-   
+    public void addData(int value) {
+        Node newNode = new Node(value);
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = newNode;
+    }
+
+    public void traverse(Node head) {
+        Node temp = head.next;
+        while (temp != null) {
+            if (temp.data != null) {
+                System.out.println(temp.data);
+            }
+            temp = temp.next;
+        }
+
+    }
 }

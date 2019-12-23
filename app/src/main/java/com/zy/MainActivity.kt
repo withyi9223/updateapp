@@ -1,6 +1,7 @@
 package com.zy
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.*
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        tv_test.setOnClickListener {
+            startActivity(Intent(this, DomoActivity::class.java))
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -57,19 +62,13 @@ class MainActivity : AppCompatActivity() {
                 "1"
             )
         )
-
-        tv_test.setOnClickListener {
-            /*val animator = ObjectAnimator.ofFloat(tv_text, "alpha", 1f, 0f, 1f)
-            animator.duration = 2000
-            animator.start()*/
-
-        }
+      
         val animator1 = ObjectAnimator.ofFloat(tv_text, "translationY", 100f, 0f)
         animator1.duration = 500
         val animator2 = ObjectAnimator.ofFloat(tv_text, "translationY", 0f, -100f)
         animator2.duration = 500
         var h = 0
-        var one=true
+        var one = true
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -77,12 +76,12 @@ class MainActivity : AppCompatActivity() {
                 Log.e("ddd", h.toString())
                 if (h > 100) {
                     if (one) {
-                        one=false
+                        one = false
                         animator1.start()
                     }
-                }else{
+                } else {
                     if (!one) {
-                        one=true
+                        one = true
                         animator2.start()
                     }
                 }

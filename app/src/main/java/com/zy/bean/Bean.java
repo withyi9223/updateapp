@@ -1,4 +1,4 @@
-package com.zy;
+package com.zy.bean;
 
 import java.util.List;
 

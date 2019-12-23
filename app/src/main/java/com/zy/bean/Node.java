@@ -1,4 +1,4 @@
-package com.zy;
+package com.zy.bean;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -20,21 +20,25 @@ package com.zy;
  * 　　　　　┃┫┫　┃┫┫
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
- * <p>
- * Created by yi on 2019/12/20.
+ * 单链表
+ * Created by yi on 2019/12/23.
  */
-public class UserTest<T> {
+public class Node {
 
-    protected T Utest;
 
-    public UserTest() {
-        this.Utest = createTest();
+    public Integer data;
+    public Node next;
+
+    public Node() {
     }
 
-    private T createTest() {
-        return Util.getInstance(this);
+    public Node(int data) {
+        this.data = data;
     }
 
-    
-   
+    public Node(int data, Node next) {
+        this.data = data;
+        this.next = next;
+    }
+
 }
