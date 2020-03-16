@@ -1,4 +1,4 @@
-package com.zy;
+package com.download;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,21 +21,13 @@ package com.zy;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/20.
+ * Created by zengyi on 2019/12/1.
  */
-public class PresenterTest {
+public interface INetCallback {
 
+    //void success(UpdateBean bean);
 
-    public void getData() {
+    void failed(Throwable throwable);
 
-        System.out.println("getData");
-
-    }
-
-
-    public void request() {
-
-        System.out.println("request");
-    }
-
+   
 }

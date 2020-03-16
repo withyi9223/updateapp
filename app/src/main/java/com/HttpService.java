@@ -1,4 +1,11 @@
-package com.zy.celuomoshi;
+package com;
+
+import io.reactivex.Observable;
+import okhttp3.ResponseBody;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,18 +28,15 @@ package com.zy.celuomoshi;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/17.
+ * Created by yi on 2020/3/16.
  */
-public class Context {
+public interface HttpService {
 
-    private Strategy strategy;
 
-    public Context(Strategy strategy) {
-        this.strategy = strategy;
-    }
+    //apk下载
+    //可以在参数中加入header 通知服务器需要下载文件的范围 实现断点续传
+    @Streaming
+    @GET
+    Observable<ResponseBody> download(@Url String url, @Header("Range")String range);
 
-    public int executeStrategy(int num, int num2) {
-        return strategy.doOperation(num, num2);
-    }
-   
 }

@@ -1,4 +1,8 @@
-package com.zy.builder;
+package com.download;
+
+import java.io.File;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,20 +25,22 @@ package com.zy.builder;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/19.
+ * Created by zengyi on 2019/12/1.
  */
-public class KfcMain {
+public interface INetDownLoadCallBack {
 
 
-    public static void main(String[] args) {
-        Kfc kfc = new Kfc.Builder()
-                .hamburg(new Kfc.Hamburg("香辣汉堡"))
-                .takeOut(true)
-                .addIce(true)
-                .drink(new Kfc.Drink("九珍果汁"))
-                .create();
+    void success(File apkFile);
 
-        System.out.println(kfc.toString());
-    }
+    void progress(int pregress);
 
+    void failed(Throwable throwable);
+    
+    void cancel(Disposable d);
+    
+    void curlen(long curlen);
+    
+    void total(long total);
+    
+    
 }

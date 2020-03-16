@@ -1,4 +1,6 @@
-package com.zy.bean;
+package com;
+
+import android.app.Application;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,37 +23,15 @@ package com.zy.bean;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/23.
+ * Created by yi on 2020/3/9.
  */
-public class MyLinkedList {
+public class MyApplication extends Application {
 
-    private Node head = new Node();
+    public static MyApplication context;
 
-    public void setHead(Node head) {
-        this.head = head;
-    }
-
-    public Node getHead() {
-        return head;
-    }
-
-    public void addData(int value) {
-        Node newNode = new Node(value);
-        Node temp = head;
-        while (temp.next != null) {
-            temp = temp.next;
-        }
-        temp.next = newNode;
-    }
-
-    public void traverse(Node head) {
-        Node temp = head.next;
-        while (temp != null) {
-            if (temp.data != null) {
-                System.out.println(temp.data);
-            }
-            temp = temp.next;
-        }
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        context = this;
     }
 }

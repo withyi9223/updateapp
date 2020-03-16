@@ -1,4 +1,4 @@
-package com.zy.adapter;
+package com.download;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,11 +21,35 @@ package com.zy.adapter;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/19.
+ * Created by zengyi on 2019/12/1.
  */
-public class AdapterA extends Adapter implements Target {
-    @Override
-    public void request() {
-        specificRequest();
+public class AppUpdateUtil {
+
+
+    private static AppUpdateUtil mAppUpdateUtil = null;
+
+    private INetManager iNetManager = new OkhttpDownload();
+
+    public void setiNetManager(INetManager iNetManager) {
+        this.iNetManager = iNetManager;
     }
+
+    public INetManager getiNetManager() {
+        return iNetManager;
+    }
+
+    private AppUpdateUtil() {
+    }
+
+    public static AppUpdateUtil getInstance() {
+        synchronized (AppUpdateUtil.class) {
+            if (mAppUpdateUtil == null) {
+                mAppUpdateUtil = new AppUpdateUtil();
+            }
+        }
+        return mAppUpdateUtil;
+    }
+    
+    
+
 }

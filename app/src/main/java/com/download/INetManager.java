@@ -1,4 +1,6 @@
-package com.zy.adapter;
+package com.download;
+
+import java.io.File;
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -21,20 +23,12 @@ package com.zy.adapter;
  * 　　　　　┗┻┛　┗┻┛
  * ━━━━━━感觉萌萌哒━━━━━━
  * <p>
- * Created by yi on 2019/12/19.
+ * Created by zengyi on 2019/12/1.
  */
-public class AdapterMain {
+public interface INetManager {
 
-    public static void main(String[] args) {
-        /*System.out.println("适配器测试");
-        Target target=new AdapterA();
-        target.request();*/
+    void get(INetCallback callback);
 
-        AduioPlayer aduioPlayer = new AduioPlayer();
-        aduioPlayer.play("mp3", "huangxiaoming");
-        aduioPlayer.play("mp4", "dd.mp4");
-        aduioPlayer.play("vlc", "sss.vlc");
-        aduioPlayer.play("avi", "mmm.avi");
-    }
-
+    void download(String url, File apkFile, INetDownLoadCallBack callBack,String range,Long range1,File file);
+    
 }
