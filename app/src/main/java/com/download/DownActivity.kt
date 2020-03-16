@@ -5,15 +5,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.MLog
 import com.zy.R
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_down.*
-import java.io.File
-import java.lang.reflect.Field
+import java.io.*
+
 
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -68,9 +68,9 @@ class DownActivity : AppCompatActivity() {
             if (file2.isFile) {
                 file2.delete()
             }
-            startByte=0
-            endByte1=0
-            endByte2=0
+            startByte = 0
+            endByte1 = 0
+            endByte2 = 0
             loadApk(file1, "bytes=$startByte-", startByte)
 
         }
@@ -155,5 +155,51 @@ class DownActivity : AppCompatActivity() {
         }
     }
 
+    fun mergeFiles(
+        fpaths: Array<String?>?,
+        resultPath: String?
+    ): Boolean {
+        if (fpaths == null || fpaths.size < 1 || TextUtils.isEmpty(resultPath)) {
+            return false
+        }
+        if (fpaths.size == 1) {
+            return File(fpaths[0]).renameTo(File(resultPath))
+        }
+        val files = arrayOfNulls<File>(fpaths.size)
+        for (i in fpaths.indices) {
+            files[i] = File(fpaths[i])
+            if (TextUtils.isEmpty(fpaths[i]) || !files[i]!!.exists() || !files[i]!!
+                    .isFile
+            ) {
+                return false
+            }
+        }
+        val resultFile = File(resultPath)
+        try {
+            val bufSize = 1024
+            val outputStream =
+                BufferedOutputStream(FileOutputStream(resultFile))
+            val buffer = ByteArray(bufSize)
+            for (i in fpaths.indices) {
+                val inputStream = BufferedInputStream(FileInputStream(files[i]))
+                var readcount: Int
+                while (inputStream.read(buffer).also { readcount = it } > 0) {
+                    outputStream.write(buffer, 0, readcount)
+                }
+                inputStream.close()
+            }
+            outputStream.close()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return false
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return false
+        }
+        for (i in fpaths.indices) {
+            files[i]!!.delete()
+        }
+        return true
+    }
 
 }
