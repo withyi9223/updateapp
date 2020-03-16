@@ -163,7 +163,7 @@ public class OkhttpDownload implements INetManager {
                                     file.createNewFile();
                                 }
                                 apkFile.renameTo(file);
-								
+
                             }
 
                         } catch (Throwable e) {
@@ -207,4 +207,5 @@ public class OkhttpDownload implements INetManager {
 
 		return chain.proceed(request);
 	};*/
+  
 }

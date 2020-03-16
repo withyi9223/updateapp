@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.MLog
@@ -50,28 +49,27 @@ class DownActivity : AppCompatActivity() {
     var endByte2: Long = 0
     var total: Long = 0
 
-    //var filetag = 0
-    //lateinit var file: File //多线程下载
+    var filetag = 0
+    lateinit var file: File //多线程下载
     lateinit var file1: File
-    lateinit var file2: File
+    var file2: File? = null
+    var file3: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_down)
-        //setfile(filetag)
-        file1 = File(this.cacheDir.path + "/aaa.temp")
         file2 = File(this.cacheDir.path + "/aaa.apk")
+        file3 = File(this.cacheDir.path + "apk/")
+        //模拟多线程分段下载最后合并
+        setfile(filetag)
         tv_down_load.setOnClickListener {
-            if (file1.isFile) {
-                file1.delete()
-            }
-            if (file2.isFile) {
-                file2.delete()
+            if (file.isFile) {
+                file.delete()
             }
             startByte = 0
             endByte1 = 0
             endByte2 = 0
-            loadApk(file1, "bytes=$startByte-", startByte)
+            loadApk(file, "bytes=$startByte-", 0)
 
         }
 
@@ -80,17 +78,46 @@ class DownActivity : AppCompatActivity() {
         }
 
         tv_start.setOnClickListener {
-            //filetag += 1
-            //setfile(filetag)
+            filetag += 1
+            setfile(filetag)
             endByte2 += endByte1
-            loadApk(file1, "bytes=$endByte2-", endByte2)
+            loadApk(file, "bytes=$endByte2-", 0)
 
         }
+        /* 
+        //断点续传
+         file1 = File(this.cacheDir.path + "/aaa.temp")
+         tv_down_load.setOnClickListener {
+             if (file1.isFile) {
+                 file1.delete()
+             }
+             if (file2.isFile) {
+                 file2.delete()
+             }
+             startByte = 0
+             endByte1 = 0
+             endByte2 = 0
+             loadApk(file1, "bytes=$startByte-", startByte)
+ 
+         }
+ 
+         tv_stop.setOnClickListener {
+             disposable?.dispose()
+         }
+ 
+         tv_start.setOnClickListener {
+             //filetag += 1
+             //setfile(filetag)
+             endByte2 += endByte1
+             loadApk(file1, "bytes=$endByte2-", endByte2)
+ 
+         }*/
+
 
     }
 
     fun setfile(tag: Int) {
-        //file = File(this.cacheDir.path + "/$tag")
+        file = File(this.cacheDir.path + "apk/$tag")
     }
 
     fun loadApk(file: File, range: String, range1: Long) {
@@ -98,7 +125,9 @@ class DownActivity : AppCompatActivity() {
             .download(url, file, object : INetDownLoadCallBack {
                 override fun success(apkFile: File) {
                     MLog.e(apkFile.length().toString())
-                    installApk(this@DownActivity, apkFile)
+                    
+                    mergeFiles(file3!!.listFiles(),file2!!)
+                    //installApk(this@DownActivity, apkFile)
                 }
 
                 override fun progress(pregress: Int) {
@@ -155,33 +184,18 @@ class DownActivity : AppCompatActivity() {
         }
     }
 
-    fun mergeFiles(
-        fpaths: Array<String?>?,
-        resultPath: String?
-    ): Boolean {
-        if (fpaths == null || fpaths.size < 1 || TextUtils.isEmpty(resultPath)) {
-            return false
-        }
-        if (fpaths.size == 1) {
-            return File(fpaths[0]).renameTo(File(resultPath))
-        }
-        val files = arrayOfNulls<File>(fpaths.size)
-        for (i in fpaths.indices) {
-            files[i] = File(fpaths[i])
-            if (TextUtils.isEmpty(fpaths[i]) || !files[i]!!.exists() || !files[i]!!
-                    .isFile
-            ) {
-                return false
-            }
-        }
-        val resultFile = File(resultPath)
+    private fun mergeFiles(
+        files: Array<File>,
+        resultFile: File
+    ): File? {
         try {
             val bufSize = 1024
             val outputStream =
                 BufferedOutputStream(FileOutputStream(resultFile))
             val buffer = ByteArray(bufSize)
-            for (i in fpaths.indices) {
-                val inputStream = BufferedInputStream(FileInputStream(files[i]))
+            for (file in files) {
+                val inputStream =
+                    BufferedInputStream(FileInputStream(file))
                 var readcount: Int
                 while (inputStream.read(buffer).also { readcount = it } > 0) {
                     outputStream.write(buffer, 0, readcount)
@@ -189,17 +203,10 @@ class DownActivity : AppCompatActivity() {
                 inputStream.close()
             }
             outputStream.close()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-            return false
         } catch (e: IOException) {
             e.printStackTrace()
-            return false
         }
-        for (i in fpaths.indices) {
-            files[i]!!.delete()
-        }
-        return true
+        return resultFile
     }
 
 }
